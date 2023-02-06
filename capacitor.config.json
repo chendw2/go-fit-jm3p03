@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "GoFit",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}

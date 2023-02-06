@@ -1,0 +1,8 @@
+{
+  "name": "GoFit",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react",
+  "id": "486601a0"
+}
