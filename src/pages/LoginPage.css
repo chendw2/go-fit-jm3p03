@@ -1,0 +1,12 @@
+.header {
+    text-align:center;
+}
+
+.username {
+    text-align:center;
+    --padding-top:50px;
+}
+
+ion-content{
+    --padding-top:200px;
+}

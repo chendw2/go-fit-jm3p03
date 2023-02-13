@@ -1,0 +1,12 @@
+.title {
+    text-align:center;
+    padding-right:50px;
+}
+
+.top {
+    --padding-end:10px;
+}
+
+ion-button{
+    color:black;
+}
