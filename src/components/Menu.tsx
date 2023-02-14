@@ -12,27 +12,32 @@ const Menu: React.FC = () => {
         <IonGrid class='ion-padding' fixed={true}>
             <IonRow>
                 <IonMenuToggle>
-                    <IonButton fill='clear' routerLink='./Main'>Home Page</IonButton>
+                    <IonButton fill='solid' color="light" routerLink='./Main'>Home Page</IonButton>
                 </IonMenuToggle>
             </IonRow>
             <IonRow>
                 <IonMenuToggle>
-                    <IonButton fill='clear' routerLink='./Search'>Search Exercises</IonButton>
+                    <IonButton fill='solid' color="light" routerLink='./Questionnaire'>Questionnaire</IonButton>
                 </IonMenuToggle>
             </IonRow>
             <IonRow>
                 <IonMenuToggle>
-                    <IonButton fill='clear' routerLink='./Preferences'>Personal Info/Preferences</IonButton>
+                    <IonButton fill='solid' color="light" routerLink='./Search'>Search Exercises</IonButton>
                 </IonMenuToggle>
             </IonRow>
             <IonRow>
                 <IonMenuToggle>
-                    <IonButton fill='clear' routerLink='./History'>History</IonButton>
+                    <IonButton fill='solid' color="light" routerLink='./Preferences'>Personal Info/Preferences</IonButton>
                 </IonMenuToggle>
             </IonRow>
             <IonRow>
                 <IonMenuToggle>
-                    <IonButton fill='clear' routerLink='./LoginPage'>Log Out</IonButton>
+                    <IonButton fill='solid' color="light" routerLink='./History'>History</IonButton>
+                </IonMenuToggle>
+            </IonRow>
+            <IonRow>
+                <IonMenuToggle>
+                    <IonButton fill='solid' color="light" routerLink='./LoginPage'>Log Out</IonButton>
                 </IonMenuToggle>
             </IonRow>
         </IonGrid>

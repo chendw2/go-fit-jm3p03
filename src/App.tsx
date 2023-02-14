@@ -16,6 +16,8 @@ import Main from './pages/Main';
 import Search from './pages/Search';
 import Preferences from './pages/Preferences';
 import History from './pages/History';
+import Questionnaire from './pages/Questionnaire';
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -44,6 +46,9 @@ const App: React.FC = () => (
         <Route exact path="/LoginPage">
           <Login/>
         </Route>
+        <Route exact path="/Questionnaire">
+          <Questionnaire />
+        </Route>
         <Route exact path="/Main">
           <Main />
         </Route>
@@ -56,6 +61,8 @@ const App: React.FC = () => (
         <Route exact path="/History">
           <History />
         </Route>
+
+
         <Route exact path="/">
           <Redirect to="/LoginPage" />
         </Route>
