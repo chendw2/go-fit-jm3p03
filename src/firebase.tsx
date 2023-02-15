@@ -1,11 +1,13 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import {Router, useHistory} from "react-router";
-import {useEffect, useState} from "react";
-import { collection, addDoc, getDocs, doc, getDoc,setDoc } from "firebase/firestore";
+import {useEffect, useState,useContext} from "react";
+import { collection, addDoc, getDocs, doc, getDoc,setDoc} from "firebase/firestore";
 import {getFirestore} from "firebase/firestore";
+
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -25,15 +27,63 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore();
-const login = async(username:any) => 
+const auth = getAuth(app);
+
+
+const registerUser = async(email:any,password:any) => 
 {
-    const data =
-    {
-        height:5,
-        weight:69,
-        age:420
-    }
-    await setDoc(doc(db,"Users",username),data);
+  const res = await createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+  const user = userCredential.user;
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
+
 }
 
-export {login};
+const login = async(email:any,password:any) => 
+{
+  try{
+    await signInWithEmailAndPassword(auth,email,password);
+  }
+  catch(err:any){
+    console.error(err);
+    alert(err.message);
+  }
+}
+
+const addQuestionnaireInfo = async(name:any,age:any,weight:any,height:any) =>
+{
+  try{
+    const username = auth.currentUser?.email;
+    if (username)
+    {
+      const data = 
+      {
+        name:name,
+        age:age,
+        weight:weight,
+        height:height,
+      }
+      await setDoc(doc(db,"Users",username),data);
+    }
+    else{
+      alert(
+        "User not found"
+      )
+    }
+  }
+  catch(err:any)
+  {
+    console.error(err);
+    alert(err.message);
+  }
+
+
+
+}
+
+
+export {login,registerUser,auth,addQuestionnaireInfo};
