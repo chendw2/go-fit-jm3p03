@@ -1,9 +1,12 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonButton, IonButtons, IonTabs, IonTabBar, IonTabButton,
     IonMenuButton, IonMenu, IonMenuToggle, IonGrid, IonRow } from '@ionic/react';
+import { Redirect, Route, useHistory } from 'react-router-dom';
+import {signOut} from '../firebase'
 
 const Menu: React.FC = () => {
+    const history = useHistory();
     return (
-      <IonMenu contentId="main-content">
+      <IonMenu contentId="main-content" menuId="menu">
         <IonHeader>
           <IonToolbar>
             <IonTitle>Menu</IonTitle>
@@ -11,33 +14,28 @@ const Menu: React.FC = () => {
         </IonHeader>
         <IonGrid class='ion-padding' fixed={true}>
             <IonRow>
-                <IonMenuToggle>
+                <IonMenuToggle menu="menu" autoHide={false}>
                     <IonButton fill='solid' color="light" routerLink='./Main'>Home Page</IonButton>
                 </IonMenuToggle>
             </IonRow>
             <IonRow>
-                <IonMenuToggle>
+                <IonMenuToggle menu="menu" autoHide={false}>
                     <IonButton fill='solid' color="light" routerLink='./Questionnaire'>Questionnaire</IonButton>
                 </IonMenuToggle>
             </IonRow>
             <IonRow>
-                <IonMenuToggle>
+                <IonMenuToggle menu="menu" autoHide={false}>
                     <IonButton fill='solid' color="light" routerLink='./Search'>Search Exercises</IonButton>
                 </IonMenuToggle>
             </IonRow>
             <IonRow>
-                <IonMenuToggle>
-                    <IonButton fill='solid' color="light" routerLink='./Preferences'>Personal Info/Preferences</IonButton>
-                </IonMenuToggle>
-            </IonRow>
-            <IonRow>
-                <IonMenuToggle>
+                <IonMenuToggle menu="menu" autoHide={false}>
                     <IonButton fill='solid' color="light" routerLink='./History'>History</IonButton>
                 </IonMenuToggle>
             </IonRow>
             <IonRow>
-                <IonMenuToggle>
-                    <IonButton fill='solid' color="light" routerLink='./LoginPage'>Log Out</IonButton>
+                <IonMenuToggle menu="menu" autoHide={false}>
+                    <IonButton fill='solid' color="light" onClick={(e) => signOut(history)}>Log Out</IonButton>
                 </IonMenuToggle>
             </IonRow>
         </IonGrid>

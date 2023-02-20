@@ -1,8 +1,8 @@
-.header {
+.center {
     text-align:center;
 }
 
-.username {
+.email {
     text-align:center;
     --padding-top:50px;
 }

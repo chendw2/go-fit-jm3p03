@@ -30,27 +30,27 @@ const Questionnaire: React.FC = () => {
           <IonContent>
             <IonCard>
                 <IonItem>
-                    <IonLabel color="light" >Name</IonLabel>
-                        <IonInput className = "username" name = "Name" type = "text" placeholder="What is your Name?"
+                    <IonLabel color="black" >Name: </IonLabel>
+                        <IonInput name = "Name" type = "text" placeholder="What is your Name?"
                         onIonChange= {(username:any) => setName(username.detail.value)} >
                         </IonInput>
                 </IonItem>
                 <IonItem>
-                    <IonLabel color="light" >Age</IonLabel>
-                        <IonInput className = "age" name = "age" type = "text" placeholder="What is your age?"
+                    <IonLabel color="black" >Age: </IonLabel>
+                        <IonInput name = "age" type = "text" placeholder="What is your age?"
                         onIonChange= {(age:any) => setAge(age.detail.value)} >
                         </IonInput>
                 </IonItem>
                 <IonItem>
-                    <IonLabel color="light" >Weight</IonLabel>
-                        <IonInput className = "weight" name = "weight" type = "text" placeholder="What is your weight?"
+                    <IonLabel color="black" >Weight: </IonLabel>
+                        <IonInput name = "weight" type = "text" placeholder="What is your weight?"
                         onIonChange= {(weight:any) => setWeight(weight.detail.value)} >
 
                         </IonInput>
                 </IonItem>
                 <IonItem>
-                    <IonLabel color="light" >Height</IonLabel>
-                        <IonInput className = "height" name = "height" type = "text" placeholder="What is your Height?"
+                    <IonLabel color="black" >Height: </IonLabel>
+                        <IonInput name = "height" type = "text" placeholder="What is your Height?"
                         onIonChange= {(height:any) => setHeight(height.detail.value)} 
                         >
                         </IonInput>

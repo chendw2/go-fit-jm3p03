@@ -1,4 +1,5 @@
 // Import the functions you need from the SDKs you need
+import { Redirect, Route } from 'react-router-dom';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
@@ -30,27 +31,31 @@ const db = getFirestore();
 const auth = getAuth(app);
 
 
-const registerUser = async(email:any,password:any) => 
+const registerUser = async(email:any,password:any, history:any) => 
 {
   const res = await createUserWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
   const user = userCredential.user;
+  history.push("/Questionnaire");
   })
   .catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;
+    alert(errorMessage);
   });
 
 }
 
-const login = async(email:any,password:any) => 
+const login = async(email:any,password:any, history:any) => 
 {
   try{
     await signInWithEmailAndPassword(auth,email,password);
+    history.push("/Main");
   }
   catch(err:any){
     console.error(err);
     alert(err.message);
+
   }
 }
 
@@ -81,9 +86,18 @@ const addQuestionnaireInfo = async(name:any,age:any,weight:any,height:any) =>
     alert(err.message);
   }
 
+}
 
-
+const signOut = async(history:any) => 
+{
+  auth.signOut()
+  .then(()=>{
+    history.push("/LoginPage");
+  })
+  .catch((error) => {
+    alert(error.message);
+  })
 }
 
 
-export {login,registerUser,auth,addQuestionnaireInfo};
+export {login,registerUser,auth,addQuestionnaireInfo, signOut};

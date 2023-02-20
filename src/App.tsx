@@ -14,7 +14,6 @@ import { ellipse, square, triangle } from 'ionicons/icons';
 import Login from './pages/LoginPage';
 import Main from './pages/Main';
 import Search from './pages/Search';
-import Preferences from './pages/Preferences';
 import History from './pages/History';
 import Questionnaire from './pages/Questionnaire';
 /* Core CSS required for Ionic components to work properly */
@@ -53,9 +52,6 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/Search">
           <Search />
-        </Route>
-        <Route exact path="/Preferences">
-          <Preferences />
         </Route>
         <Route exact path="/History">
           <History />
