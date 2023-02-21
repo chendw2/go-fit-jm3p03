@@ -41,21 +41,11 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route exact path="/LoginPage">
-          <Login/>
-        </Route>
-        <Route exact path="/Questionnaire">
-          <Questionnaire />
-        </Route>
-        <Route exact path="/Main">
-          <Main />
-        </Route>
-        <Route exact path="/Search">
-          <Search />
-        </Route>
-        <Route exact path="/History">
-          <History />
-        </Route>
+        <Route exact path="/LoginPage" component={Login}/>
+        <Route exact path="/Questionnaire" component={Questionnaire}/>
+        <Route exact path="/Main" component={Main}/>
+        <Route exact path="/Search" component={Search}/>
+        <Route exact path="/History" component={History}/>
         <Route exact path="/">
           <Redirect to="/LoginPage" />
         </Route>
