@@ -30,6 +30,11 @@ const Menu: React.FC = () => {
             </IonRow>
             <IonRow>
                 <IonMenuToggle menu="menu" autoHide={false}>
+                    <IonButton fill='solid' color="light" routerLink='./Workout'>Current Workout</IonButton>
+                </IonMenuToggle>
+            </IonRow>
+            <IonRow>
+                <IonMenuToggle menu="menu" autoHide={false}>
                     <IonButton fill='solid' color="light" routerLink='./History'>History</IonButton>
                 </IonMenuToggle>
             </IonRow>

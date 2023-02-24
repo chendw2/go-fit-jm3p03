@@ -16,6 +16,7 @@ import Main from './pages/Main';
 import Search from './pages/Search';
 import History from './pages/History';
 import Questionnaire from './pages/Questionnaire';
+import Workout from './pages/Workout';
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -45,6 +46,7 @@ const App: React.FC = () => (
         <Route exact path="/Questionnaire" component={Questionnaire}/>
         <Route exact path="/Main" component={Main}/>
         <Route exact path="/Search" component={Search}/>
+        <Route exact path="/Workout" component={Workout}/>
         <Route exact path="/History" component={History}/>
         <Route exact path="/">
           <Redirect to="/LoginPage" />

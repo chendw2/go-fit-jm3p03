@@ -5,9 +5,10 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import {Router, useHistory} from "react-router";
 import {useEffect, useState,useContext} from "react";
-import { collection, addDoc, getDocs, doc, getDoc,setDoc} from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, getDoc,setDoc, collectionGroup, query, where, startAt, orderBy, endAt, limit} from "firebase/firestore";
 import {getFirestore} from "firebase/firestore";
-
+import {IonList, IonButton, IonCard, IonCardHeader, IonGrid, IonRow, IonCol} from '@ionic/react'
+import "./firebase.css";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -99,5 +100,45 @@ const signOut = async(history:any) =>
   })
 }
 
+const search = async(input:String, result:any) =>
+{
+  if (input != ""){
+    const q = query(collection(db, "Exercises"), orderBy("name"), startAt(input), endAt(input+"\uf8ff"), limit(15));
+    const querySnapshot = await getDocs(q);
 
-export {login,registerUser,auth,addQuestionnaireInfo, signOut};
+    //querySnapshot.forEach((doc) => {
+      //console.log(doc.id, "=>", doc.data());
+    //});
+    
+    result(<IonList className="ion-padding">{querySnapshot.docs.map((doc) => (
+      <IonCard>
+        <IonGrid fixed={true}>
+          <IonRow>
+            <IonCardHeader className="card-header">{doc.data().name}</IonCardHeader>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <IonRow className="card-text">Main Body Part: {doc.data().bodyPart}</IonRow>
+              <IonRow className="card-text">Required Equipment: {doc.data().equipment}</IonRow>
+              <IonRow className="card-text">Targeted Muscle: {doc.data().target}</IonRow>
+            </IonCol>
+            <IonCol className="exercise-gif" size="auto">
+              <img alt="Silhouette of mountains" src={doc.data().gifUrl} width={125} height={125}></img>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol></IonCol>
+            <IonCol size="auto">
+              <IonButton>Add Exercise</IonButton>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonCard>
+    ))}
+
+    </IonList>)
+  }
+}
+
+
+export {login,registerUser,auth,addQuestionnaireInfo, signOut, search};
