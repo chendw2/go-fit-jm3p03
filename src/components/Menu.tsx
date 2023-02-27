@@ -1,7 +1,8 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonButton, IonButtons, IonTabs, IonTabBar, IonTabButton,
-    IonMenuButton, IonMenu, IonMenuToggle, IonGrid, IonRow } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonButton, IonButtons, IonIcon, IonTabBar, IonTabButton,
+    IonMenuButton, IonMenu, IonMenuToggle, IonGrid, IonRow, IonItem, IonImg } from '@ionic/react';
 import { Redirect, Route, useHistory } from 'react-router-dom';
 import {signOut} from '../firebase'
+
 
 const Menu: React.FC = () => {
     const history = useHistory();
@@ -17,12 +18,7 @@ const Menu: React.FC = () => {
                 <IonMenuToggle menu="menu" autoHide={false}>
                     <IonButton fill='solid' color="light" routerLink='./Main'>Home Page</IonButton>
                 </IonMenuToggle>
-            </IonRow>
-            <IonRow>
-                <IonMenuToggle menu="menu" autoHide={false}>
-                    <IonButton fill='solid' color="light" routerLink='./Questionnaire'>Questionnaire</IonButton>
-                </IonMenuToggle>
-            </IonRow>
+            </IonRow> 
             <IonRow>
                 <IonMenuToggle menu="menu" autoHide={false}>
                     <IonButton fill='solid' color="light" routerLink='./Search'>Search Exercises</IonButton>
@@ -44,6 +40,10 @@ const Menu: React.FC = () => {
                 </IonMenuToggle>
             </IonRow>
         </IonGrid>
+
+        <IonButton class = "profile-button" color = "light" shape = "round" size = "large" routerLink='./Questionnaire'>
+            <IonImg src = {require("../resources/p1.jpg")}></IonImg>
+        </IonButton>
       </IonMenu>
     );
 };

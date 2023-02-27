@@ -10,6 +10,7 @@ import {getFirestore} from "firebase/firestore";
 import {IonList, IonButton, IonCard, IonCardHeader, IonGrid, IonRow, IonCol} from '@ionic/react'
 import "./firebase.css";
 
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -141,4 +142,15 @@ const search = async(input:String, result:any) =>
 }
 
 
-export {login,registerUser,auth,addQuestionnaireInfo, signOut, search};
+const equipmentSearch = async(input:String, result:any) =>
+{
+  if (input != ""){
+
+
+
+    
+  }
+}
+
+
+export {login,registerUser,auth, addQuestionnaireInfo, equipmentSearch, signOut, search};
