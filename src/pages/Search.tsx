@@ -4,6 +4,8 @@ import Menu from '../components/Menu'
 import { useState } from "react";
 import {search} from '../firebase'
 
+
+
 const Search: React.FC = () => {
 
   const [result, setResult] = useState(<IonList></IonList>)

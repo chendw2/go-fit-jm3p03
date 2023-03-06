@@ -8,6 +8,7 @@ import {useEffect, useState,useContext} from "react";
 import { collection, addDoc, getDocs, doc, getDoc,setDoc, collectionGroup, query, where, startAt, orderBy, endAt, limit} from "firebase/firestore";
 import {getFirestore} from "firebase/firestore";
 import {IonList, IonButton, IonCard, IonCardHeader, IonGrid, IonRow, IonCol} from '@ionic/react'
+import { getDatabase, ref,} from "firebase/database";
 import "./firebase.css";
 
 
@@ -73,6 +74,7 @@ const addQuestionnaireInfo = async(name:any,age:any,weight:any,height:any) =>
         age:age,
         weight:weight,
         height:height,
+        currentExercises:new Array(0),
       }
       await setDoc(doc(db,"Users",username),data);
     }
@@ -99,6 +101,49 @@ const signOut = async(history:any) =>
   .catch((error) => {
     alert(error.message);
   })
+}
+
+const addExercise = async(exercise:any) =>
+{
+  try{
+    const username = String(auth.currentUser?.email);
+    const a = doc(db, "Users", username)
+    const l = await(getDoc(a))
+
+    //if the user exists
+    if (l.exists()) {
+
+      const data =
+      {
+        currentExercises: l.data().currentExercises
+      }
+
+      const contains = data.currentExercises.some((element:any) => {
+        if (element.name === exercise.name) {
+          return true;
+        }
+        return false;
+      })
+      if (contains) {
+        alert("Exercise already added")
+      } else if (Object.keys(data.currentExercises).length == 10) {
+        alert("Can't exceed more than 10 exercises at a time")
+      } else {
+        data.currentExercises.push(exercise)
+        await setDoc(doc(db,"Users",username), data, {merge: true});
+      }
+    }
+    else{
+      alert(
+        "User not found"
+      )
+    }
+  }
+  catch(err:any)
+  {
+    console.error(err);
+    alert(err.message);
+  }
 }
 
 const search = async(input:String, result:any) =>
@@ -130,7 +175,7 @@ const search = async(input:String, result:any) =>
           <IonRow>
             <IonCol></IonCol>
             <IonCol size="auto">
-              <IonButton>Add Exercise</IonButton>
+              <IonButton onClick = {(e) => {addExercise(doc.data())}}>Add Exercise</IonButton>
             </IonCol>
           </IonRow>
         </IonGrid>
