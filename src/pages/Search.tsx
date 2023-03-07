@@ -8,7 +8,7 @@ import {search} from '../firebase'
 
 const Search: React.FC = () => {
 
-  const [result, setResult] = useState(<IonList></IonList>)
+  const [result, setResult] = useState(<IonList/>)
 
   function p(input:String) {
     search(input, setResult)

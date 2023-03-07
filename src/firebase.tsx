@@ -8,7 +8,7 @@ import {useEffect, useState,useContext} from "react";
 import { collection, addDoc, getDocs, doc, getDoc,setDoc, collectionGroup, query, where, startAt, orderBy, endAt, limit} from "firebase/firestore";
 import {getFirestore} from "firebase/firestore";
 import {IonList, IonButton, IonCard, IonCardHeader, IonGrid, IonRow, IonCol} from '@ionic/react'
-import { getDatabase, ref,} from "firebase/database";
+import { getDatabase, ref, onValue} from "firebase/database";
 import "./firebase.css";
 
 
@@ -110,9 +110,7 @@ const addExercise = async(exercise:any) =>
     const a = doc(db, "Users", username)
     const l = await(getDoc(a))
 
-    //if the user exists
     if (l.exists()) {
-
       const data =
       {
         currentExercises: l.data().currentExercises
@@ -144,6 +142,131 @@ const addExercise = async(exercise:any) =>
     console.error(err);
     alert(err.message);
   }
+}
+
+
+const removeExercise = async(exercise:any) => 
+{
+  try{
+    const username = String(auth.currentUser?.email);
+    const a = doc(db, "Users", username)
+    const l = await(getDoc(a))
+
+    if (l.exists()) {
+      const old = l.data().currentExercises
+      const result = new Array(0)
+      old.some((item:any) => {
+        if (item.name != exercise.name) {
+          result.push(item)
+        }
+      })
+      
+      const data = 
+      {
+        currentExercises: result
+      }
+      await setDoc(doc(db,"Users",username), data, {merge: true});
+    }
+    else{
+      alert(
+        "User not found"
+      )
+    }
+  }
+  catch(err:any)
+  {
+    console.error(err);
+    alert(err.message);
+  }
+}
+
+
+const removeAllExercises = async() =>
+{
+  try{
+    const username = String(auth.currentUser?.email);
+    const a = doc(db, "Users", username)
+    const l = await(getDoc(a))
+
+    if (l.exists()) {
+      const data = 
+      {
+        currentExercises: new Array(0)
+      }
+      await setDoc(doc(db,"Users",username), data, {merge: true});
+    }
+    else{
+      alert(
+        "User not found"
+      )
+    }
+  }
+  catch(err:any)
+  {
+    console.error(err);
+    alert(err.message);
+  }
+}
+
+const updateCurrentExercises = async(setWorkout:any) =>
+{
+  try{
+    // const uid = String(auth.currentUser?.uid);
+    // if (uid)
+    const username = String(auth.currentUser?.email);
+    const a = doc(db, "Users", username)
+    const l = await(getDoc(a))
+    if (l.exists())
+    {
+      setWorkout(<IonList className="ion-padding"> {l.data().currentExercises.map((exercise:any) => (
+        <IonCard>
+          <IonGrid fixed={true}>
+          <IonRow>
+            <IonCardHeader className="card-header">{exercise.name}</IonCardHeader>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <IonRow className="card-text">Main Body Part: {exercise.bodyPart}</IonRow>
+              <IonRow className="card-text">Required Equipment: {exercise.equipment}</IonRow>
+              <IonRow className="card-text">Targeted Muscle: {exercise.target}</IonRow>
+            </IonCol>
+            <IonCol className="exercise-gif" size="auto">
+              <img alt="Silhouette of mountains" src={exercise.gifUrl} width={125} height={125}></img>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol></IonCol>
+            <IonCol size="auto">
+              <IonButton onClick={(e) => removeExercise(exercise)}>Remove Exercise</IonButton>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+        </IonCard>
+      ))}
+      </IonList>)
+
+
+      // console.log(uid)
+      // const d = getDatabase()
+      // const userEx = ref(d, 'Users/' + uid + "/currentExercises")
+      // onValue(userEx, (snapshot) => {
+      //   const data = snapshot.val();
+      //   console.log(data)
+      // });
+    }
+    else{
+      alert(
+        "User not found"
+      )
+    }
+  }
+  catch(err:any)
+  {
+    console.error(err);
+    alert(err.message);
+  }
+
+
 }
 
 const search = async(input:String, result:any) =>
@@ -198,4 +321,4 @@ const equipmentSearch = async(input:String, result:any) =>
 }
 
 
-export {login,registerUser,auth, addQuestionnaireInfo, equipmentSearch, signOut, search};
+export {login,registerUser,auth, addQuestionnaireInfo, equipmentSearch, signOut, search, updateCurrentExercises, removeAllExercises};
