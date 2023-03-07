@@ -7,7 +7,7 @@ import {Router, useHistory} from "react-router";
 import {useEffect, useState,useContext} from "react";
 import { collection, addDoc, getDocs, doc, getDoc,setDoc, collectionGroup, query, where, startAt, orderBy, endAt, limit} from "firebase/firestore";
 import {getFirestore} from "firebase/firestore";
-import {IonList, IonButton, IonCard, IonCardHeader, IonGrid, IonRow, IonCol} from '@ionic/react'
+import {IonList, IonButton, IonCard, IonCardHeader, IonCardContent, IonGrid, IonRow, IonCol} from '@ionic/react'
 import { getDatabase, ref, onValue} from "firebase/database";
 import "./firebase.css";
 
@@ -75,6 +75,7 @@ const addQuestionnaireInfo = async(name:any,age:any,weight:any,height:any) =>
         weight:weight,
         height:height,
         currentExercises:new Array(0),
+        history:new Array(0),
       }
       await setDoc(doc(db,"Users",username),data);
     }
@@ -208,51 +209,25 @@ const removeAllExercises = async() =>
   }
 }
 
-const updateCurrentExercises = async(setWorkout:any) =>
+const completeExercises = async() =>
 {
   try{
-    // const uid = String(auth.currentUser?.uid);
-    // if (uid)
     const username = String(auth.currentUser?.email);
     const a = doc(db, "Users", username)
     const l = await(getDoc(a))
-    if (l.exists())
-    {
-      setWorkout(<IonList className="ion-padding"> {l.data().currentExercises.map((exercise:any) => (
-        <IonCard>
-          <IonGrid fixed={true}>
-          <IonRow>
-            <IonCardHeader className="card-header">{exercise.name}</IonCardHeader>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <IonRow className="card-text">Main Body Part: {exercise.bodyPart}</IonRow>
-              <IonRow className="card-text">Required Equipment: {exercise.equipment}</IonRow>
-              <IonRow className="card-text">Targeted Muscle: {exercise.target}</IonRow>
-            </IonCol>
-            <IonCol className="exercise-gif" size="auto">
-              <img alt="Silhouette of mountains" src={exercise.gifUrl} width={125} height={125}></img>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol></IonCol>
-            <IonCol size="auto">
-              <IonButton onClick={(e) => removeExercise(exercise)}>Remove Exercise</IonButton>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-        </IonCard>
-      ))}
-      </IonList>)
 
-
-      // console.log(uid)
-      // const d = getDatabase()
-      // const userEx = ref(d, 'Users/' + uid + "/currentExercises")
-      // onValue(userEx, (snapshot) => {
-      //   const data = snapshot.val();
-      //   console.log(data)
-      // });
+    if (l.exists()) {
+      var temp = l.data().currentExercises.reverse()
+      temp = temp.concat(l.data().history)
+      while (temp.length > 10) {
+        temp.pop()
+      }
+      const data = 
+      {
+        history: temp,
+      }
+      await setDoc(doc(db,"Users",username), data, {merge: true});
+      removeAllExercises()
     }
     else{
       alert(
@@ -265,9 +240,86 @@ const updateCurrentExercises = async(setWorkout:any) =>
     console.error(err);
     alert(err.message);
   }
-
-
 }
+
+const updateCurrentExercises = async(setWorkout:any) =>
+{
+  try{
+    const username = String(auth.currentUser?.email);
+    const a = doc(db, "Users", username)
+    const l = await(getDoc(a))
+    if (l.exists())
+    {
+      setWorkout(<IonList className="ion-padding"> {l.data().currentExercises.map((exercise:any) => (
+        <IonCard>
+          <IonGrid fixed={true}>
+            <IonRow>
+              <IonCardHeader className="card-header">{exercise.name}</IonCardHeader>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <IonRow className="card-text">Main Body Part: {exercise.bodyPart}</IonRow>
+                <IonRow className="card-text">Required Equipment: {exercise.equipment}</IonRow>
+                <IonRow className="card-text">Targeted Muscle: {exercise.target}</IonRow>
+              </IonCol>
+              <IonCol className="exercise-gif" size="auto">
+                <img alt="Silhouette of mountains" src={exercise.gifUrl} width={125} height={125}></img>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol></IonCol>
+              <IonCol size="auto">
+                <IonButton onClick={(e) => removeExercise(exercise)}>Remove Exercise</IonButton>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonCard>
+      ))}
+      </IonList>)
+    }
+    else{
+      alert(
+        "User not found"
+      )
+    }
+  }
+  catch(err:any)
+  {
+    console.error(err);
+    alert(err.message);
+  }
+}
+
+const updateHistory = async(setHistory:any) =>
+{
+  try{
+    const username = String(auth.currentUser?.email);
+    const a = doc(db, "Users", username)
+    const l = await(getDoc(a))
+    if (l.exists())
+    {
+      setHistory(<IonList className="ion-padding"> {l.data().history.map((exercise:any) => (
+        <IonCard>
+          <IonCardHeader>Exercise: {exercise.name}</IonCardHeader>
+          <IonCardContent>Targeted Muscle: {exercise.target}</IonCardContent>
+        </IonCard>
+      ))}
+      </IonList>)
+    }
+    else{
+      alert(
+        "User not found"
+      )
+    }
+  }
+  catch(err:any)
+  {
+    console.error(err);
+    alert(err.message);
+  }
+}
+
+
 
 const search = async(input:String, result:any) =>
 {
@@ -321,4 +373,5 @@ const equipmentSearch = async(input:String, result:any) =>
 }
 
 
-export {login,registerUser,auth, addQuestionnaireInfo, equipmentSearch, signOut, search, updateCurrentExercises, removeAllExercises};
+export {login,registerUser,auth, addQuestionnaireInfo, equipmentSearch, signOut, search, updateCurrentExercises, removeAllExercises,
+  completeExercises, updateHistory};
