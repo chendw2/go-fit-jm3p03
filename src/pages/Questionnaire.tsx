@@ -10,7 +10,10 @@ interface Data
     data:string;
   
 }
-
+interface EquipmentList
+{
+  data:string[];
+}
 
 
 const Questionnaire: React.FC = () => {
@@ -18,8 +21,7 @@ const Questionnaire: React.FC = () => {
   const [age, setAge] = useState<Data | null>(null)
   const [height, setHeight] = useState<Data | null>(null)
   const [weight, setWeight] = useState<Data | null>(null)
-
-  const [result, setResult] = useState(<IonList></IonList>)
+  const [equipmentList,setEquipmentList] = useState<EquipmentList|null>(null);
 
     return (
       <>
@@ -34,8 +36,7 @@ const Questionnaire: React.FC = () => {
               <IonTitle className='title'>User Questionnaire</IonTitle>
             </IonToolbar>
           </IonHeader>
-
-        
+    
           <IonContent>
             <IonCard>
                 <IonItem>
@@ -70,15 +71,15 @@ const Questionnaire: React.FC = () => {
                         </IonInput>
                 </IonItem>
                 </IonCard>
-
-
         <IonCard>
           <IonList>
             <IonItem>
-              <IonSelect placeholder="Please select which equipment you have" multiple={true}>
+              <IonSelect placeholder="Please select which equipment you have" multiple={true}
+              onIonChange = {(e) => setEquipmentList(e.detail.value)}
+              >
                 <IonSelectOption value="assisted">assisted</IonSelectOption>
                 <IonSelectOption value="band">band</IonSelectOption>
-                <IonSelectOption value="barbel">barbel</IonSelectOption>
+                <IonSelectOption value="barbel">barbell</IonSelectOption>
                 <IonSelectOption value="body weight">body weight</IonSelectOption>
                 <IonSelectOption value="bosu ball">bosu ball</IonSelectOption>
                 <IonSelectOption value="cable">cable</IonSelectOption>
@@ -106,9 +107,8 @@ const Questionnaire: React.FC = () => {
             </IonItem>
           </IonList>
         </IonCard>
-
         <IonButton routerLink = "/Main"
-                onClick = {(e) => {addQuestionnaireInfo(name,age,height,weight)}}>Submit
+                onClick = {(e) => {addQuestionnaireInfo(name,age,height,weight,equipmentList)}}>Submit
         </IonButton>
 
         </IonContent>

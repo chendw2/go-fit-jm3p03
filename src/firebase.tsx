@@ -62,7 +62,7 @@ const login = async(email:any,password:any, history:any) =>
   }
 }
 
-const addQuestionnaireInfo = async(name:any,age:any,weight:any,height:any) =>
+const addQuestionnaireInfo = async(name:any,age:any,weight:any,height:any,equipmentList:any) =>
 {
   try{
     const username = auth.currentUser?.email;
@@ -76,6 +76,7 @@ const addQuestionnaireInfo = async(name:any,age:any,weight:any,height:any) =>
         height:height,
         currentExercises:new Array(0),
         history:new Array(0),
+        equipmentList:equipmentList
       }
       await setDoc(doc(db,"Users",username),data);
     }
