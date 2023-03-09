@@ -14,7 +14,10 @@ interface EquipmentList
 {
   data:string[];
 }
-
+interface BodyPartList
+{
+  data:string[];
+}
 
 const Questionnaire: React.FC = () => {
   const [name, setName] = useState<Data| null>(null)
@@ -22,7 +25,7 @@ const Questionnaire: React.FC = () => {
   const [height, setHeight] = useState<Data | null>(null)
   const [weight, setWeight] = useState<Data | null>(null)
   const [equipmentList,setEquipmentList] = useState<EquipmentList|null>(null);
-
+  const [bodyPartList, setBodyPartList] = useState<BodyPartList|null>(null);
     return (
       <>
         <Menu/>
@@ -75,8 +78,7 @@ const Questionnaire: React.FC = () => {
           <IonList>
             <IonItem>
               <IonSelect placeholder="Please select which equipment you have" multiple={true}
-              onIonChange = {(e) => setEquipmentList(e.detail.value)}
-              >
+              onIonChange = {(e) => setEquipmentList(e.detail.value)}>
                 <IonSelectOption value="assisted">assisted</IonSelectOption>
                 <IonSelectOption value="band">band</IonSelectOption>
                 <IonSelectOption value="barbel">barbell</IonSelectOption>
@@ -107,8 +109,27 @@ const Questionnaire: React.FC = () => {
             </IonItem>
           </IonList>
         </IonCard>
+        <IonCard>
+          <IonList>
+            <IonItem>
+              <IonSelect placeholder="Please select the body parts that you want to work on" multiple={true}
+              onIonChange = {(e) => setBodyPartList(e.detail.value)}>
+                <IonSelectOption value="back">Back</IonSelectOption>
+                <IonSelectOption value="cardio">Cardio</IonSelectOption>
+                <IonSelectOption value="chest">Chest</IonSelectOption>
+                <IonSelectOption value="lower arms">Lower Arms</IonSelectOption>
+                <IonSelectOption value="lower legs">Lower Legs</IonSelectOption>
+                <IonSelectOption value="neck">Neck</IonSelectOption>
+                <IonSelectOption value="shoulders">Shoulders</IonSelectOption>
+                <IonSelectOption value="upper arms">Upper Arms</IonSelectOption>
+                <IonSelectOption value="upper legs">Upper Legs</IonSelectOption>
+                <IonSelectOption value="waist">Waist</IonSelectOption>
+              </IonSelect>
+            </IonItem>
+          </IonList>
+        </IonCard>
         <IonButton routerLink = "/Main"
-                onClick = {(e) => {addQuestionnaireInfo(name,age,height,weight,equipmentList)}}>Submit
+                onClick = {(e) => {addQuestionnaireInfo(name,age,height,weight,equipmentList,bodyPartList)}}>Submit
         </IonButton>
 
         </IonContent>

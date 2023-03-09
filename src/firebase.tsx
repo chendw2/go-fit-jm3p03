@@ -61,11 +61,36 @@ const login = async(email:any,password:any, history:any) =>
 
   }
 }
-
-const addQuestionnaireInfo = async(name:any,age:any,weight:any,height:any,equipmentList:any) =>
+const addQuestionnaireInfo = async(name:any,age:any,weight:any,height:any,equipmentList:any,bodyPartList:any) =>
 {
   try{
     const username = auth.currentUser?.email;
+    if (!name)
+    {
+      alert("Please input a name");
+    }
+    if (!age)
+    {
+      alert("Please input an age")
+    }
+    if (!weight)
+    {
+      alert("Please input a weight")
+    }
+    if (!height)
+    {
+      alert("Please input a height")
+    }
+    /*Not sure if we need to force users to input at least one equipment & body part
+    if (!equipmentList)
+    {
+      alert("Nothing was found in your Equipment List")
+    }
+    if (!bodyPartList)
+    {
+      alert("Nothing was found in your Body Part List")
+    }
+    */
     if (username)
     {
       const data = 
@@ -76,7 +101,8 @@ const addQuestionnaireInfo = async(name:any,age:any,weight:any,height:any,equipm
         height:height,
         currentExercises:new Array(0),
         history:new Array(0),
-        equipmentList:equipmentList
+        equipmentList:equipmentList,
+        bodyPartList:bodyPartList
       }
       await setDoc(doc(db,"Users",username),data);
     }
