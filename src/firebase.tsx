@@ -105,6 +105,7 @@ const addQuestionnaireInfo = async(name:any,age:any,weight:any,height:any,equipm
         bodyPartList:bodyPartList
       }
       await setDoc(doc(db,"Users",username),data);
+      await setInitialExercises();
     }
     else{
       alert(
@@ -353,11 +354,9 @@ const search = async(input:String, result:any) =>
   if (input != ""){
     const q = query(collection(db, "Exercises"), orderBy("name"), startAt(input), endAt(input+"\uf8ff"), limit(15));
     const querySnapshot = await getDocs(q);
-
     //querySnapshot.forEach((doc) => {
       //console.log(doc.id, "=>", doc.data());
     //});
-    
     result(<IonList className="ion-padding">{querySnapshot.docs.map((doc) => (
       <IonCard>
         <IonGrid fixed={true}>
@@ -397,6 +396,42 @@ const equipmentSearch = async(input:String, result:any) =>
 
     
   }
+}
+
+const setInitialExercises = async() =>
+{
+  const username = String(auth.currentUser?.email);
+  const r = doc(db, "Users", username);
+  const userInfo = await(getDoc(r));
+  if (userInfo.exists())
+  {
+      const bodyParts = userInfo.data().bodyPartList;
+      const equipment = userInfo.data().equipmentList;
+      const data = 
+      {
+        currentExercises:userInfo.data().currentExercises
+      }
+  
+      for (var bodyPart of bodyParts)
+      {
+        const q = query(collection(db,"Exercises"),where("bodyPart","==",bodyPart));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) =>
+          {
+            if (Object.keys(data.currentExercises).length < 10)
+            {
+              data.currentExercises.push(doc.data());
+            }
+          }
+        )
+      }
+      await setDoc(doc(db,"Users",username),data,{merge:true});
+  }
+  else{
+    alert("Error occurred");
+  }
+
+
 }
 
 
