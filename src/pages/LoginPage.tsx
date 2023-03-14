@@ -32,7 +32,6 @@ const [username, setUsername] = useState<LoginData | null>(null);
 const [password, setPassword] = useState<LoginData | null>(null);
 const history = useHistory();
   
-
 return (
     <IonPage>
       <IonHeader>

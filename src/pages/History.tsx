@@ -1,5 +1,5 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonButton, IonButtons, IonTabs, IonTabBar, IonTabButton,
-    IonMenuButton, IonMenu, IonMenuToggle, IonGrid, IonRow, IonList } from '@ionic/react';
+    IonMenuButton, IonMenu, IonMenuToggle, IonGrid, IonRow, IonList, useIonViewWillEnter} from '@ionic/react';
 import Menu from '../components/Menu'
 import { useState } from "react";
 import { updateHistory } from '../firebase';
@@ -7,6 +7,10 @@ import { updateHistory } from '../firebase';
 const History: React.FC = () => {
 
   const [history, setHistory] = useState(<IonList></IonList>)
+  useIonViewWillEnter(async () => {
+    updateHistory(setHistory)
+  })
+
 
     return (
       <>
@@ -21,7 +25,6 @@ const History: React.FC = () => {
             </IonToolbar>
           </IonHeader>
           <IonContent className="ion-padding">
-            <IonButton onClick = {(e) => updateHistory(setHistory)}>Refresh Page</IonButton>
             {history}
           </IonContent>
         </IonPage>

@@ -61,6 +61,8 @@ const login = async(email:any,password:any, history:any) =>
 
   }
 }
+
+
 const addQuestionnaireInfo = async(name:any,age:any,weight:any,height:any,equipmentList:any,bodyPartList:any) =>
 {
   try{
@@ -174,7 +176,7 @@ const addExercise = async(exercise:any) =>
 }
 
 
-const removeExercise = async(exercise:any) => 
+const removeExercise = async(exercise:any, setWorkout:any) => 
 {
   try{
     const username = String(auth.currentUser?.email);
@@ -195,6 +197,7 @@ const removeExercise = async(exercise:any) =>
         currentExercises: result
       }
       await setDoc(doc(db,"Users",username), data, {merge: true});
+      updateCurrentExercises(setWorkout)
     }
     else{
       alert(
@@ -210,7 +213,7 @@ const removeExercise = async(exercise:any) =>
 }
 
 
-const removeAllExercises = async() =>
+const removeAllExercises = async(setExercises:any) =>
 {
   try{
     const username = String(auth.currentUser?.email);
@@ -223,6 +226,7 @@ const removeAllExercises = async() =>
         currentExercises: new Array(0)
       }
       await setDoc(doc(db,"Users",username), data, {merge: true});
+      updateCurrentExercises(setExercises)
     }
     else{
       alert(
@@ -237,7 +241,7 @@ const removeAllExercises = async() =>
   }
 }
 
-const completeExercises = async() =>
+const completeExercises = async(setExercises:any) =>
 {
   try{
     const username = String(auth.currentUser?.email);
@@ -255,7 +259,7 @@ const completeExercises = async() =>
         history: temp,
       }
       await setDoc(doc(db,"Users",username), data, {merge: true});
-      removeAllExercises()
+      removeAllExercises(setExercises)
     }
     else{
       alert(
@@ -297,7 +301,7 @@ const updateCurrentExercises = async(setWorkout:any) =>
             <IonRow>
               <IonCol></IonCol>
               <IonCol size="auto">
-                <IonButton onClick={(e) => removeExercise(exercise)}>Remove Exercise</IonButton>
+                <IonButton onClick={(e) => removeExercise(exercise, setWorkout)}>Remove Exercise</IonButton>
               </IonCol>
             </IonRow>
           </IonGrid>

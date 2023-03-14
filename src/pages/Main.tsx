@@ -1,9 +1,12 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonButton, IonButtons, IonTabs, IonTabBar, IonTabButton,
-IonMenuButton, IonMenu, IonMenuToggle, IonGrid, IonRow } from '@ionic/react';
+IonMenuButton, IonMenu, IonMenuToggle, IonGrid, IonRow, IonList, useIonViewWillEnter } from '@ionic/react';
 import './Main.css';
+import { useState } from "react";
+import { updateHistory } from '../firebase';
 import Menu from '../components/Menu'
 
 const Main: React.FC = () => {
+
   return (
     <>
       <Menu/>
