@@ -7,7 +7,7 @@ import {Router, useHistory} from "react-router";
 import {useEffect, useState,useContext} from "react";
 import { collection, addDoc, getDocs, doc, getDoc,setDoc, collectionGroup, query, where, startAt, orderBy, endAt, limit} from "firebase/firestore";
 import {getFirestore} from "firebase/firestore";
-import {IonList, IonButton, IonCard, IonCardHeader, IonCardContent, IonGrid, IonRow, IonCol} from '@ionic/react'
+import {IonList, IonButton, IonCard, IonCardHeader, IonCardContent, IonGrid, IonRow, IonCol, IonContent} from '@ionic/react'
 import { getDatabase, ref, onValue} from "firebase/database";
 import "./firebase.css";
 
@@ -53,6 +53,7 @@ const login = async(email:any,password:any, history:any) =>
 {
   try{
     await signInWithEmailAndPassword(auth,email,password);
+    await updateRecommendation();
     history.push("/Main");
   }
   catch(err:any){
@@ -104,7 +105,8 @@ const addQuestionnaireInfo = async(name:any,age:any,weight:any,height:any,equipm
         currentExercises:new Array(0),
         history:new Array(0),
         equipmentList:equipmentList,
-        bodyPartList:bodyPartList
+        bodyPartList:bodyPartList,
+        recommendation:new Array(0)
       }
       await setDoc(doc(db,"Users",username),data);
       await setInitialExercises();
@@ -351,8 +353,6 @@ const updateHistory = async(setHistory:any) =>
   }
 }
 
-
-
 const search = async(input:String, result:any) =>
 {
   if (input != ""){
@@ -434,10 +434,130 @@ const setInitialExercises = async() =>
   else{
     alert("Error occurred");
   }
+}
 
+const updateRecommendation = async() =>
+{
+  const username = String(auth.currentUser?.email);
+  const r = doc(db, "Users", username);
+  const userInfo = await(getDoc(r));
+  if (userInfo.exists())
+  {
+    const history = userInfo.data().history;
+    if (history.length > 5) {
+      const bodyParts = userInfo.data().bodyPartList;
+      const equipment = userInfo.data().equipmentList;
 
+      const data =
+      {
+        recommendation: new Array(0)
+      }
+
+      //create array with the target bodyparts of the exercises in history
+      var historyParts = new Array(0)
+      for (var exercise of history)
+      {
+        if (historyParts.indexOf(exercise.target) == -1) {
+          historyParts.push(exercise.target)
+        }
+      }
+
+      //figure out which targets were not worked on in the current history of exercises
+      var masterParts = ['abductors', 'abs', 'biceps', 'calves', 'cardiovascular system', 'delts', 'forearms', 'glutes', 'hamstrings', 'lats', 'levator scapulae', 'pectorals', 'quads', 'serratus anterior', 'spine', 'traps', 'triceps', 'upper back']
+      var finalParts = new Array(0)
+      for (var part of masterParts) {
+        if (historyParts.indexOf(part) == -1) {
+          finalParts.push(part)
+        }
+      }
+
+      //pick a random target to query
+      const num = Math.floor(Math.random() * finalParts.length)
+      var x = finalParts.at(num)
+      var q = query(collection(db,"Exercises"), where("target", "==", x))
+      var querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) =>
+        {
+          if (equipment.indexOf(doc.data().equipment) != -1 && data.recommendation.length<5)
+          {
+            if (Math.random() > .3) {
+              data.recommendation.push(doc.data())
+            }
+          }
+        }
+      )
+
+      // console.log(historyParts)
+      // console.log(masterParts)
+      // console.log(finalParts)
+      // console.log(equipment)
+      // console.log(x)
+      // console.log(data.recommendation)
+      await setDoc(doc(db,"Users",username),data,{merge:true});
+    }
+      
+  }
+  else{
+    alert("Error occurred");
+  }
+}
+
+const displayRecommendation = async(setRec:any, setText:any) => 
+{
+  try{
+    const username = String(auth.currentUser?.email);
+    const a = doc(db, "Users", username)
+    const l = await(getDoc(a))
+    if (l.exists())
+    {
+      if (l.data().recommendation.length > 0) {
+        setText(<p className="center-text">Your recent exercises haven't been focusing on your {l.data().recommendation[0].target}. Here are some recommendations for that!</p>)
+        setRec(<IonList className="ion-padding"> {l.data().recommendation.map((exercise:any) => (
+          <IonCard>
+            <IonGrid fixed={true}>
+              <IonRow>
+                <IonCardHeader className="card-header">{exercise.name}</IonCardHeader>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonRow className="card-text">Main Body Part: {exercise.bodyPart}</IonRow>
+                  <IonRow className="card-text">Required Equipment: {exercise.equipment}</IonRow>
+                  <IonRow className="card-text">Targeted Muscle: {exercise.target}</IonRow>
+                </IonCol>
+                <IonCol className="exercise-gif" size="auto">
+                  <img alt="Silhouette of mountains" src={exercise.gifUrl} width={125} height={125}></img>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol></IonCol>
+                <IonCol size="auto">
+                  <IonButton onClick={(e) => addExercise(exercise)}>Add Exercise</IonButton>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          </IonCard>
+        ))}
+        </IonList>)
+      }
+      else{
+        setText(<p className="center-text">Search for some exercises to get started!</p>)
+        setRec(<IonList></IonList>)
+      }
+    }
+    else{
+      alert(
+        "User not found"
+      )
+    }
+  }
+  catch(err:any)
+  {
+    console.error(err);
+    alert(err.message);
+  }
 }
 
 
+
 export {login,registerUser,auth, addQuestionnaireInfo, equipmentSearch, signOut, search, updateCurrentExercises, removeAllExercises,
-  completeExercises, updateHistory};
+  completeExercises, updateHistory, updateRecommendation, displayRecommendation};

@@ -114,6 +114,7 @@ const Questionnaire: React.FC = () => {
             <IonItem>
               <IonSelect placeholder="Please select the body parts that you want to work on" multiple={true}
               onIonChange = {(e) => setBodyPartList(e.detail.value)}>
+                <IonSelectOption value="abs">Abs</IonSelectOption>
                 <IonSelectOption value="back">Back</IonSelectOption>
                 <IonSelectOption value="cardio">Cardio</IonSelectOption>
                 <IonSelectOption value="chest">Chest</IonSelectOption>
